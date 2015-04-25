@@ -43,16 +43,23 @@ int buddy2_alloc(struct buddy2* self, int size) {
   unsigned node_size;
   unsigned offset = 0;
 
-  if (self==NULL)
+  if (self==NULL){
+    printf("buddy2_alloc: ERROR self is NULL\n");
     return -1;
+  }
 
   if (size <= 0)
     size = 1;
-  else if (!IS_POWER_OF_2(size))
+  else if (!IS_POWER_OF_2(size)){
+    printf("size %d is not power of 2\n",size);
     size = fixsize(size);
+    printf("fixed size is %d \n",size);
+  }
 
-  if (self->longest[index] < size)
+  if (self->longest[index] < size){
+    printf("buddy2_alloc: ERROR only %d size, no enough size\n",self->longest[index]);
     return -1;
+  }
 
   for(node_size = self->size; node_size != size; node_size /= 2 ) {
     if (self->longest[LEFT_LEAF(index)] >= size)
@@ -81,7 +88,7 @@ void buddy2_free(struct buddy2* self, int offset) {
 
   node_size = 1;
   index = offset + self->size - 1;
-
+  printf("buddy2_free: offset is %d, the related last index is %d\n",offset,index);
   for (; self->longest[index] ; index = PARENT(index)) {
     node_size *= 2;
     if (index == 0)

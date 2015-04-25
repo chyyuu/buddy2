@@ -17,13 +17,13 @@ int main() {
   buddy2_dump(buddy);
   for (;;) {
     scanf("%s %d", cmd, &arg);
-    if (strcmp(cmd, "alloc") == 0) {
+    if (strcmp(cmd, "a") == 0) {
       printf("allocated@%d\n", buddy2_alloc(buddy, arg));
       buddy2_dump(buddy);
-    } else if (strcmp(cmd, "free") == 0) {
+    } else if (strcmp(cmd, "f") == 0) {
       buddy2_free(buddy, arg);
       buddy2_dump(buddy);
-    } else if (strcmp(cmd, "size") == 0) {
+    } else if (strcmp(cmd, "s") == 0) {
       printf("size: %d\n", buddy2_size(buddy, arg));
       buddy2_dump(buddy);
     } else
