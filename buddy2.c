@@ -2,21 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
-
-struct buddy2 {
-  unsigned size;
-  unsigned longest[1]; 
-};
-
-#define LEFT_LEAF(index) ((index) * 2 + 1)
-#define RIGHT_LEAF(index) ((index) * 2 + 2)
-#define PARENT(index) ( ((index) + 1) / 2 - 1)
-
-#define IS_POWER_OF_2(x) (!((x)&((x)-1)))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
-#define ALLOC malloc
-#define FREE free
+#include "buddy2.h"
 
 static unsigned fixsize(unsigned size) {
   size |= size >> 1;
@@ -36,6 +22,7 @@ struct buddy2* buddy2_new( int size ) {
     return NULL;
 
   self = (struct buddy2*)ALLOC( 2 * size * sizeof(unsigned));
+  printf("buddy2_new: size is %d, malloc mem size of %d\n", size, 2*size*sizeof(unsigned));
   self->size = size;
   node_size = size * 2;
 
@@ -79,7 +66,7 @@ int buddy2_alloc(struct buddy2* self, int size) {
 
   while (index) {
     index = PARENT(index);
-    self->longest[index] = 
+    self->longest[index] =
       MAX(self->longest[LEFT_LEAF(index)], self->longest[RIGHT_LEAF(index)]);
   }
 
@@ -109,8 +96,8 @@ void buddy2_free(struct buddy2* self, int offset) {
 
     left_longest = self->longest[LEFT_LEAF(index)];
     right_longest = self->longest[RIGHT_LEAF(index)];
-    
-    if (left_longest + right_longest == node_size) 
+
+    if (left_longest + right_longest == node_size)
       self->longest[index] = node_size;
     else
       self->longest[index] = MAX(left_longest, right_longest);
@@ -143,7 +130,6 @@ void buddy2_dump(struct buddy2* self) {
     printf("buddy2_dump: (struct buddy2*)self is too big to dump");
     return;
   }
-
   memset(canvas,'_', sizeof(canvas));
   node_size = self->size * 2;
 

@@ -3,6 +3,21 @@
 
 #include <stdlib.h>
 
+struct buddy2 {
+  unsigned size;
+  unsigned longest[1];
+};
+
+#define LEFT_LEAF(index) ((index) * 2 + 1)
+#define RIGHT_LEAF(index) ((index) * 2 + 2)
+#define PARENT(index) ( ((index) + 1) / 2 - 1)
+
+#define IS_POWER_OF_2(x) (!((x)&((x)-1)))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+#define ALLOC malloc
+#define FREE free
+
 struct buddy2;
 struct buddy2* buddy2_new( int size );
 void buddy2_destroy( struct buddy2* self );
